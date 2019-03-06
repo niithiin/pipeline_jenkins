@@ -19,7 +19,7 @@ node {
          sshagent(['9f7c7290-bdb2-411d-9734-f6d168f38fe5']) {
              def dockerRun = 'sudo docker run -dit niithiin/my-app' 
           sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.31.117 ${dockerRun} "
-     }
-     }
+       }
+      }
      }
 
