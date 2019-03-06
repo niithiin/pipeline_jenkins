@@ -1,0 +1,25 @@
+node {
+    
+    stage ('git') {
+        git changelog: false, poll: false, url: 'https://github.com/niithiin/Dockerfile_HelloWorld.git'
+    }
+     stage ('docker_build') {
+         
+         sh 'docker build -t niithiin/my-app .'
+     }
+    stage ('docker_creditials') {
+        withCredentials([usernamePassword(credentialsId: 'd1', passwordVariable: 'p', usernameVariable: 'u')]) 
+        {
+            sh "sudo docker login -u ${u} -p ${p}"
+         }
+            sh ' sudo docker push niithiin/my-app'
+      }
+      stage ('docker_run') {
+         
+         sshagent(['9f7c7290-bdb2-411d-9734-f6d168f38fe5']) {
+             def dockerRun = 'sudo docker run -dit niithiin/my-app' 
+          sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.31.117 ${dockerRun} "
+     }
+     }
+     }
+
